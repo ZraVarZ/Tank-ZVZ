@@ -1,0 +1,29 @@
+#mindennekAzAlapja{
+	-fx-background-image: url("../pictures/hatter.png");
+}
+
+#kezdesButton, #eredmenyekButton, #kilepesButton{
+	-fx-background-color: transparent;
+	-fx-font-size: 24px;
+	-fx-font-family: Georgia;
+	-fx-text-fill: cyan;
+}
+
+#nevLabel{
+    -fx-font-size: 34px;
+    -fx-font-family: Georgia;
+    -fx-text-fill: deepskyblue;
+}
+
+#adjMegNevetLabel{
+    -fx-font-size: 24px;
+    -fx-font-family: Georgia;
+    -fx-text-fill: crimson;
+}
+
+#adjMegNevetTextField, #adjMegNevetButton{
+    -fx-font-size: 20px;
+    -fx-font-family: Georgia;
+    -fx-text-fill: crimson;
+    -fx-background-color: steelblue;
+}

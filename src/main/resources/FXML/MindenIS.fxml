@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="mindennekAzAlapja" prefHeight="450.0" prefWidth="800.0" stylesheets="@../CSS/MindenhezIS.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.FoMenuController">
+    <children>
+      <Pane id="alapMenuPane" fx:id="alapMenuPane" disable="true" layoutX="49.0" layoutY="15.0" opacity="0.5" prefHeight="78.0" prefWidth="703.0">
+         <children>
+              <Button id="kezdesButton" fx:id="kezdesButton" layoutX="306.0" layoutY="18.0" mnemonicParsing="false" onAction="#kezdesB" text="Új játék!" />
+              <Button id="eredmenyekButton" fx:id="eredmenyekButton" layoutX="429.0" layoutY="18.0" onAction="#eredmenyekB" text="Eredmények" />
+              <Button id="kilepesButton" fx:id="kilepesButton" layoutX="596.0" layoutY="18.0" mnemonicParsing="false" onAction="#kilepesB" text="Kilépés" />
+            <Label id="nevLabel" fx:id="nevlabel" layoutX="23.0" layoutY="19.0" text="Tank-ZVZ" />
+         </children>
+      </Pane>
+      <Pane id="adjMegNevetPane" fx:id="adjMegNevetPane" layoutX="244.0" layoutY="105.0" prefHeight="174.0" prefWidth="295.0">
+         <children>
+            <Label id="adjMegNevetLabel" fx:id="adjMegNevetLabel" layoutX="53.0" layoutY="14.0" text="Adj meg nevet pls" />
+            <TextField id="adjMegNevetTextField" fx:id="adjMegNevetTextField" layoutX="18.0" layoutY="50.0" />
+            <Button id="adjMegNevetButton" fx:id="adjMegNevetButton" layoutX="88.0" layoutY="106.0" mnemonicParsing="false" onAction="#handleAdjMegNevetButton" text="Ez legyen!" />
+         </children>
+      </Pane>
+    </children>
+
+</AnchorPane>
