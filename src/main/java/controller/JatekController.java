@@ -8,6 +8,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import model.Tank;
 
 import java.util.Random;
 
@@ -19,11 +20,10 @@ public class JatekController {
     private static final int GAME_WIDTH = 832;
     private static final int GAME_HEIGHT = 832;
 
-    private ImageView tank;
-    private ImageView wall;
-
-    private boolean isLeftKeyPressed;
-    private boolean isRightKeyPressed;
+    private boolean wGombLenyomva;
+    private boolean aGombLenyomva;
+    private boolean sGombLenyomva;
+    private boolean dGombLenyomva;
     private int angle;
     private AnimationTimer idozito;
 
@@ -33,7 +33,13 @@ public class JatekController {
     private ImageView[] konnyuTank;
     private ImageView[] vadaszTank;
     private ImageView[] nehezTank;
+   // private ImageView tank;
+    private ImageView wall;
+    private ImageView wall2;
     Random random;
+
+    private ImageView tank2 = new ImageView("pictures/testtank.png");
+    Tank jatekos = new Tank(tank2, 300, 600);
 
     JatekController(){
         initStage();
@@ -52,10 +58,14 @@ public class JatekController {
         jatekScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                if(event.getCode() == KeyCode.LEFT){
-                    isLeftKeyPressed = true;
-                } else if (event.getCode() == KeyCode.RIGHT){
-                    isRightKeyPressed = true;
+                if(event.getCode() == KeyCode.W){
+                    wGombLenyomva = true;
+                } else if (event.getCode() == KeyCode.A){
+                    aGombLenyomva = true;
+                } else if (event.getCode() == KeyCode.S){
+                    sGombLenyomva = true;
+                } else if (event.getCode() == KeyCode.D){
+                    dGombLenyomva = true;
                 } else if (event.getCode() == KeyCode.ESCAPE){
                     idozito.stop();
                     jatekStage.hide();
@@ -66,10 +76,14 @@ public class JatekController {
         jatekScene.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                if(event.getCode() == KeyCode.LEFT){
-                    isLeftKeyPressed = false;
-                } else if (event.getCode() == KeyCode.RIGHT){
-                    isRightKeyPressed = false;
+                if(event.getCode() == KeyCode.W){
+                    wGombLenyomva = false;
+                } else if (event.getCode() == KeyCode.A){
+                    aGombLenyomva = false;
+                } else if (event.getCode() == KeyCode.S){
+                    sGombLenyomva = false;
+                } else if (event.getCode() == KeyCode.D){
+                    dGombLenyomva = false;
                 }
             }
         });
@@ -84,14 +98,19 @@ public class JatekController {
     }
 
     private void tankLetrehozasa(){
-        tank = new ImageView("pictures/testtank.png");
-        tank.setLayoutX(GAME_WIDTH/2);
-        tank.setLayoutY(GAME_HEIGHT - 90);
-        jatekPane.getChildren().add(tank);
+    //    tank = new ImageView("pictures/testtank.png");
+    //    tank.setLayoutX(GAME_WIDTH/2);
+    //    tank.setLayoutY(GAME_HEIGHT - 90);
+    //    jatekPane.getChildren().add(tank);
         wall = new ImageView("pictures/testwall.png");
-        wall.setLayoutX(GAME_WIDTH/4);
-        wall.setLayoutY(GAME_HEIGHT - 90);
+        wall.setLayoutX(0);
+        wall.setLayoutY(64);
         jatekPane.getChildren().add(wall);
+        wall2 = new ImageView("pictures/testwall.png");
+        wall2.setLayoutX(128);
+        wall2.setLayoutY(64);
+        jatekPane.getChildren().add(wall2);
+        jatekPane.getChildren().add(jatekos.getTankKepe());
     }
 
     private void loopLetrehozasa(){
@@ -108,39 +127,17 @@ public class JatekController {
     }
 
     private void tankMozgas(){
-        if(isLeftKeyPressed && !isRightKeyPressed){
-            if(angle > -30){
-                angle -= 5;
-            }
-            tank.setRotate(angle);
-            if (tank.getLayoutX() > 0){
-                tank.setLayoutX(tank.getLayoutX() -4);
-            }
+        if(wGombLenyomva && !aGombLenyomva && !sGombLenyomva && !dGombLenyomva){
+            jatekos.fel(4);
         }
-        if(!isLeftKeyPressed && isRightKeyPressed){
-            if(angle < 30){
-                angle += 5;
-            }
-            tank.setRotate(angle);
-            if (tank.getLayoutX() < 832-56){
-                tank.setLayoutX(tank.getLayoutX() +4);
-            }
+        if(!wGombLenyomva && aGombLenyomva && !sGombLenyomva && !dGombLenyomva){
+            jatekos.balra(4);
         }
-        if(!isLeftKeyPressed && !isRightKeyPressed){
-            if (angle < 0){
-                angle += 5;
-            } else if (angle > 0){
-                angle -= 5;
-            }
-            tank.setRotate(angle);
+        if(!wGombLenyomva && !aGombLenyomva && sGombLenyomva && !dGombLenyomva){
+            jatekos.le(4);
         }
-        if(isLeftKeyPressed && isRightKeyPressed){
-            if (angle < 0){
-                angle += 5;
-            } else if (angle > 0){
-                angle -= 5;
-            }
-            tank.setRotate(angle);
+        if(!wGombLenyomva && !aGombLenyomva && !sGombLenyomva && dGombLenyomva){
+            jatekos.jobbra(4);
         }
     }
 
@@ -200,21 +197,24 @@ public class JatekController {
 
     private void utkozesFigyeles(){
         for(int i=0; i<konnyuTank.length; i++){
-            if (konnyuTank[i].getBoundsInParent().intersects(tank.getBoundsInParent())){
-                System.out.println("puff xDD");
+            if (konnyuTank[i].getBoundsInParent().intersects(jatekos.getTankKepe().getBoundsInParent())){
+                System.out.println("konnyu puff xDD");
             }
         }
         for(int i=0; i<vadaszTank.length; i++){
-            if (vadaszTank[i].getBoundsInParent().intersects(tank.getBoundsInParent())){
-                System.out.println("puff xDD");
+            if (vadaszTank[i].getBoundsInParent().intersects(jatekos.getTankKepe().getBoundsInParent())){
+                System.out.println("vadasz puff xDD");
             }
         }
         for(int i=0; i<nehezTank.length; i++){
-            if (nehezTank[i].getBoundsInParent().intersects(tank.getBoundsInParent())){
-                System.out.println("puff xDD");
+            if (nehezTank[i].getBoundsInParent().intersects(jatekos.getTankKepe().getBoundsInParent())){
+                System.out.println("nehez puff xDD");
             }
         }
-        if(tank.getBoundsInParent().intersects(wall.getBoundsInParent())){
+        if(jatekos.getTankKepe().getBoundsInParent().intersects(wall.getBoundsInParent())){
+            System.out.println("wall xDD");
+        }
+        if(jatekos.getTankKepe().getBoundsInParent().intersects(wall2.getBoundsInParent())){
             System.out.println("wall xDD");
         }
     }
