@@ -2,14 +2,21 @@ package controller;
 
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import model.FalGyenge;
+import model.Palya;
 import model.Tank;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class JatekController {
@@ -24,7 +31,6 @@ public class JatekController {
     private boolean aGombLenyomva;
     private boolean sGombLenyomva;
     private boolean dGombLenyomva;
-    private int angle;
     private AnimationTimer idozito;
 
     private final static String TANK1_IMAGE = "pictures/testtank1.png";
@@ -33,13 +39,20 @@ public class JatekController {
     private ImageView[] konnyuTank;
     private ImageView[] vadaszTank;
     private ImageView[] nehezTank;
-   // private ImageView tank;
-    private ImageView wall;
-    private ImageView wall2;
+    private ImageView wall = new ImageView("pictures/testwall.png");
+    private Image teglaImg = new Image("pictures/testwall.png");
+    private Image betonImg = new Image("pictures/testwall1.png");
+
+    private ArrayList<FalGyenge> gyengeFalak = new ArrayList<>();
+
+    private ArrayList<Node> teglaKokca = new ArrayList<>();
+    private ArrayList<Node> betonKocka = new ArrayList<>();
+    Node remove = null;
+
     Random random;
 
-    private ImageView tank2 = new ImageView("pictures/testtank.png");
-    Tank jatekos = new Tank(tank2, 300, 600);
+    private ImageView tank = new ImageView("pictures/testtank.png");
+    Tank jatekos = new Tank(tank, 300, 750);
 
     JatekController(){
         initStage();
@@ -90,6 +103,7 @@ public class JatekController {
     }
 
     public void jatekLetrehozasa(){
+        palyaLetrehozasa();
         tankLetrehozasa();
         enemyTankokLetrehozasa();
         loopLetrehozasa();
@@ -97,19 +111,39 @@ public class JatekController {
 
     }
 
+    private void palyaLetrehozasa(){
+        for (int i = 0; i < Palya.PALYA.length; i++){
+            String sor = Palya.PALYA[i];
+            for (int j = 0; j < sor.length(); j++){
+                switch (sor.charAt(j)){
+                    case '0':
+                        break;
+                    case '1':
+                     /*   FalGyenge gyengeFal = new FalGyenge(wall, j*64, i*64);
+                        gyengeFalak.add(gyengeFal);
+                        tiles[i][j] = new FalGyenge(wall,j*64, i*64);
+                        jatekPane.getChildren().add(tiles[i][j].getFalKepe());*/
+                        Node tegla = falakLetrehozasa(j*64, i*64, 64, 64, teglaImg);
+                        teglaKokca.add(tegla);
+                        break;
+                    case '2':
+                        Node beton = falakLetrehozasa(j*64, i*64, 64, 64, betonImg);
+                        betonKocka.add(beton);
+                }
+            }
+        }
+    }
+
+    private Node falakLetrehozasa(int x, int y, int w, int h, Image image){
+        Rectangle fal = new Rectangle(w, h);
+        fal.setTranslateX(x);
+        fal.setTranslateY(y);
+        fal.setFill(new ImagePattern(image));
+        jatekPane.getChildren().add(fal);
+        return fal;
+    }
+
     private void tankLetrehozasa(){
-    //    tank = new ImageView("pictures/testtank.png");
-    //    tank.setLayoutX(GAME_WIDTH/2);
-    //    tank.setLayoutY(GAME_HEIGHT - 90);
-    //    jatekPane.getChildren().add(tank);
-        wall = new ImageView("pictures/testwall.png");
-        wall.setLayoutX(0);
-        wall.setLayoutY(64);
-        jatekPane.getChildren().add(wall);
-        wall2 = new ImageView("pictures/testwall.png");
-        wall2.setLayoutX(128);
-        wall2.setLayoutY(64);
-        jatekPane.getChildren().add(wall2);
         jatekPane.getChildren().add(jatekos.getTankKepe());
     }
 
@@ -117,7 +151,7 @@ public class JatekController {
         idozito = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                enemyMozgatas();
+             //   enemyMozgatas();
                 enemyPozicioFigyelesEsUjrasorsolas();
                 utkozesFigyeles();
                 tankMozgas();
@@ -128,16 +162,16 @@ public class JatekController {
 
     private void tankMozgas(){
         if(wGombLenyomva && !aGombLenyomva && !sGombLenyomva && !dGombLenyomva){
-            jatekos.fel(4);
+            jatekos.fel(2);
         }
         if(!wGombLenyomva && aGombLenyomva && !sGombLenyomva && !dGombLenyomva){
-            jatekos.balra(4);
+            jatekos.balra(2);
         }
         if(!wGombLenyomva && !aGombLenyomva && sGombLenyomva && !dGombLenyomva){
-            jatekos.le(4);
+            jatekos.le(2);
         }
         if(!wGombLenyomva && !aGombLenyomva && !sGombLenyomva && dGombLenyomva){
-            jatekos.jobbra(4);
+            jatekos.jobbra(2);
         }
     }
 
@@ -211,10 +245,16 @@ public class JatekController {
                 System.out.println("nehez puff xDD");
             }
         }
+        teglaKokca.forEach((tteeggllaa) -> {
+            if (jatekos.getTankKepe().getBoundsInParent().intersects(tteeggllaa.getBoundsInParent())){
+                System.out.println("wallkep");
+                remove = tteeggllaa;
+            }
+        });
+        teglaKokca.remove(remove);
+        jatekPane.getChildren().remove(remove);
+
         if(jatekos.getTankKepe().getBoundsInParent().intersects(wall.getBoundsInParent())){
-            System.out.println("wall xDD");
-        }
-        if(jatekos.getTankKepe().getBoundsInParent().intersects(wall2.getBoundsInParent())){
             System.out.println("wall xDD");
         }
     }

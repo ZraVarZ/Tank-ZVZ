@@ -3,12 +3,12 @@ package model;
 import javafx.scene.image.ImageView;
 
 public class Tank {
+
     private int szelesseg = 56;
     private int magassag = 56;
     private int pozicioX;
     private int pozicioY;
     private int forgas = 0;
-
 
     ImageView tankKepe;
 
