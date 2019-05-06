@@ -17,11 +17,26 @@
             <Label id="nevLabel" fx:id="nevlabel" layoutX="23.0" layoutY="19.0" text="Tank-ZVZ" />
          </children>
       </Pane>
-      <Pane id="adjMegNevetPane" fx:id="adjMegNevetPane" layoutX="244.0" layoutY="105.0" prefHeight="174.0" prefWidth="295.0">
+      <Pane id="adjMegNevetPane" fx:id="adjMegNevetPane" layoutX="253.0" layoutY="93.0" prefHeight="174.0" prefWidth="295.0">
          <children>
             <Label id="adjMegNevetLabel" fx:id="adjMegNevetLabel" layoutX="53.0" layoutY="14.0" text="Adj meg nevet pls" />
             <TextField id="adjMegNevetTextField" fx:id="adjMegNevetTextField" layoutX="18.0" layoutY="50.0" />
             <Button id="adjMegNevetButton" fx:id="adjMegNevetButton" layoutX="88.0" layoutY="106.0" mnemonicParsing="false" onAction="#handleAdjMegNevetButton" text="Ez legyen!" />
+         </children>
+      </Pane>
+      <Pane id="eredmenyekPane" fx:id="eredmenyekPane" layoutX="181.0" layoutY="21.0" prefHeight="411.0" prefWidth="439.0" visible="false">
+         <children>
+            <TableView prefHeight="372.0" prefWidth="439.0">
+                <placeholder>
+                    <Label text="Nincsenek eredmények." />
+                </placeholder>
+              <columns>
+                <TableColumn prefWidth="76.0" text="Helyezés" />
+                <TableColumn prefWidth="215.0" text="Név" />
+                  <TableColumn prefWidth="147.0" text="Pontszám" />
+              </columns>
+            </TableView>
+            <Button id="eredmenyekExitButton" fx:id="eredmenyekExitButton" layoutX="143.0" layoutY="372.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="153.0" text="Button" />
          </children>
       </Pane>
     </children>
