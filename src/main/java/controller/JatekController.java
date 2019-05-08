@@ -90,8 +90,11 @@ public class JatekController {
                 } else if (event.getCode() == KeyCode.ESCAPE){
                     idozito.stop();
 
-                    JSONKeszito json = new JSONKeszito(megadottnev, szerzettpont);
-                    json.keszites();
+                    XMLKeszito keszito = new XMLKeszito();
+                    keszito.keszites(megadottnev, szerzettpont);
+
+                 /*   XMLOlvaso olvaso = new XMLOlvaso();
+                    olvaso.olvasas();*/
 
                     jatekStage.hide();
                 }

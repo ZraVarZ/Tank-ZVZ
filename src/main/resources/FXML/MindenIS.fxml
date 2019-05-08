@@ -26,17 +26,15 @@
       </Pane>
       <Pane id="eredmenyekPane" fx:id="eredmenyekPane" layoutX="181.0" layoutY="21.0" prefHeight="411.0" prefWidth="439.0" visible="false">
          <children>
-            <TableView prefHeight="372.0" prefWidth="439.0">
+            <TableView id="tablazat" fx:id="tablazat" prefHeight="372.0" prefWidth="439.0">
                 <placeholder>
                     <Label text="Nincsenek eredmények." />
                 </placeholder>
               <columns>
-                <TableColumn prefWidth="76.0" text="Helyezés" />
-                <TableColumn prefWidth="215.0" text="Név" />
-                  <TableColumn prefWidth="147.0" text="Pontszám" />
+
               </columns>
             </TableView>
-            <Button id="eredmenyekExitButton" fx:id="eredmenyekExitButton" layoutX="143.0" layoutY="372.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="153.0" text="Button" />
+            <Button id="eredmenyekExitButton" fx:id="eredmenyekExitButton" onAction="#handleEredmenyekExitButton" layoutX="143.0" layoutY="372.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="153.0" text="Ok" />
          </children>
       </Pane>
     </children>
