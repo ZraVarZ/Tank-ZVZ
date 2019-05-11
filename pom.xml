@@ -6,7 +6,7 @@
 
     <groupId>com.zravarz</groupId>
     <artifactId>Tank-ZVZ</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.1</version>
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>

@@ -285,30 +285,30 @@ public class JatekController {
     }
 
     private void ellensegMozgatas(){
-        random = new Random().nextInt(3);
-        if (random == 0){
+        random = new Random().nextInt(12);
+        if (random == 0 || random == 1 || random == 2){
             ellenseg1.balra(2);
         }
-        if (random == 1){
+        if (random == 3 || random == 4 || random == 5){
             ellenseg1.fel(2);
         }
-        if (random == 2){
+        if (random == 6 || random == 7 || random == 8){
             ellenseg1.jobbra(2);
         }
-        if (random == 3){
+        if (random == 9 || random == 10 || random == 11){
             ellenseg1.le(2);
         }
-        random = new Random().nextInt(3);
-        if (random == 0){
+        random = new Random().nextInt(12);
+        if (random == 0 || random == 1 || random == 2){
             ellenseg2.balra(2);
         }
-        if (random == 1){
+        if (random == 3 || random == 4 || random == 5){
             ellenseg2.fel(2);
         }
-        if (random == 2){
+        if (random == 6 || random == 7 || random == 8){
             ellenseg2.jobbra(2);
         }
-        if (random == 3){
+        if (random == 9 || random == 10 || random == 11){
             ellenseg2.le(2);
         }
     }
