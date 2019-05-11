@@ -1,9 +1,5 @@
 package model;
 
-import javafx.scene.image.Image;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Rectangle;
-
 public class Fal {
 
     private int szelesseg = 32;
@@ -11,32 +7,29 @@ public class Fal {
     private int pozicioX;
     private int pozicioY;
 
-    private Image falKepe;
-    private Rectangle fal = new Rectangle(szelesseg,magassag);
-
-    public Fal(Image falKepe, int pozicioX, int pozicioY) {
+    public Fal(int pozicioX, int pozicioY) {
         this.pozicioX = pozicioX;
         this.pozicioY = pozicioY;
-        this.falKepe = falKepe;
-        fal.setLayoutX(getPozicioX());
-        fal.setLayoutY(getPozicioY());
-        fal.setFill(new ImagePattern(falKepe));
     }
 
-    public Rectangle getFal() {
-        return fal;
+    public Fal(){
+
     }
 
-    public void setFal(Rectangle fal) {
-        this.fal = fal;
+    public int getSzelesseg() {
+        return szelesseg;
     }
 
-    public Image getFalKepe() {
-        return falKepe;
+    public void setSzelesseg(int szelesseg) {
+        this.szelesseg = szelesseg;
     }
 
-    public void setFalKepe(Image falKepe) {
-        this.falKepe = falKepe;
+    public int getMagassag() {
+        return magassag;
+    }
+
+    public void setMagassag(int magassag) {
+        this.magassag = magassag;
     }
 
     public int getPozicioX() {

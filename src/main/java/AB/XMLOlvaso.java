@@ -1,4 +1,4 @@
-package model;
+package AB;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,9 +14,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 
-import static java.lang.Integer.parseInt;
-import static java.lang.Integer.parseUnsignedInt;
-
 public class XMLOlvaso {
     public ObservableList olvasas() throws ParserConfigurationException, SAXException, IOException{
 
@@ -27,7 +24,6 @@ public class XMLOlvaso {
         ObservableList<Eredmeny> eredmenyek = FXCollections.observableArrayList();
         NodeList nodeList = document.getElementsByTagName("eredmeny");
 
-        int j = 1;
         for (int i = 0; i < nodeList.getLength(); i++){
             Eredmeny eredmeny = new Eredmeny();
             Node node = nodeList.item(i);
@@ -50,24 +46,9 @@ public class XMLOlvaso {
                         .getElementsByTagName("pont")
                         .item(0)
                         .getTextContent());
-
             }
             eredmenyek.add(eredmeny);
         }
         return eredmenyek;
-
-
-   /*     for (int i = 0; i<nodeList.getLength(); i++) {
-            Node node = nodeList.item(i);
-
-            if (node.getNodeType() == Node.ELEMENT_NODE) {
-                Element element = (Element) node;
-
-                System.out.println("Név: "+element.getElementsByTagName("nev").item(0).getTextContent());
-                System.out.println("Pont: "+element.getElementsByTagName("pont").item(0).getTextContent());
-            }
-        }
-
-        System.out.println(document.getDocumentElement().getNodeName());*/
     }
 }

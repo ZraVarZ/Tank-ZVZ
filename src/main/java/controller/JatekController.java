@@ -1,8 +1,8 @@
 package controller;
 
+import AB.XMLKeszito;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -22,58 +22,58 @@ public class JatekController {
     private Scene jatekScene;
     private Stage jatekStage;
 
-    private static final int GAME_WIDTH = 832;
-    private static final int GAME_HEIGHT = 832;
+    private static final int JATEK_SZELESSEG = 832;
+    private static final int JATEK_MAGASSAG = 832;
+    private int tankSebesseg = 2;
+    private int lovedekSebesseg = 8;
 
     private boolean wGombLenyomva;
     private boolean aGombLenyomva;
     private boolean sGombLenyomva;
     private boolean dGombLenyomva;
     private boolean spaceGombLenyomva;
-    private boolean lohet = true;
     private AnimationTimer idozito;
 
-    private final static String TANK1_IMAGE = "pictures/testtank1.png";
-    private final static String TANK2_IMAGE = "pictures/testtank2.png";
-    private final static String TANK3_IMAGE = "pictures/testtank3.png";
-    private Image ezkell = new Image("pictures/testtank1.png");
-    private Image ezkell2 = new Image("pictures/testtank2.png");
-
     private ImageView palyaKep = new ImageView("pictures/palya.png");
+    private Image testtank3 = new Image("pictures/testtank3.png");
+    private Image testtank2 = new Image("pictures/testtank2.png");
     private Image teglaImg = new Image("pictures/tegla.png");
     private Image betonImg = new Image("pictures/beton.png");
     private Image lovedekImg = new Image("pictures/lovedek.png");
+    private Image tank = new Image("pictures/jatekostankja.png");
 
-    private ArrayList<Fal> gyengeFalak = new ArrayList<>();
+    private ArrayList<Rectangle> gyengeFalak = new ArrayList<>();
+    private ArrayList<Rectangle> erosFalak = new ArrayList<>();
 
-    private ArrayList<Fal> falak = new ArrayList<>();
+    private Rectangle kockaTorles = null;
 
-    Fal torles = null;
+    private String megadottnev;
+    private Integer szerzettpont = 0;
 
-    Random random;
+    private Tank jatekos;
+    private Tank ellenseg1;
+    private Tank ellenseg2;
+    private Rectangle jatekosKocka;
+    private Rectangle ellensegKocka1;
+    private Rectangle ellensegKocka2;
+    private Lovedek lovedek;
+    private Rectangle lovedekKocka;
 
-    public String megadottnev;
-    public Integer szerzettpont = 0;
-
-    private Image tank = new Image("pictures/testtank.png");
-    Tank jatekos;
-    private ArrayList<Tank> konnyuTankok = new ArrayList<>();
-    private ArrayList<Lovedek> lovedekek = new ArrayList<>();
+    private int random;
 
     JatekController(){
         initStage();
         initGombnyomas();
-        random = new Random();
     }
 
-    public void initStage(){
+    private void initStage(){
         jatekPane = new AnchorPane();
-        jatekScene = new Scene(jatekPane, GAME_WIDTH, GAME_HEIGHT);
+        jatekScene = new Scene(jatekPane, JATEK_SZELESSEG, JATEK_MAGASSAG);
         jatekStage = new Stage();
         jatekStage.setScene(jatekScene);
     }
 
-    public void initGombnyomas(){
+    private void initGombnyomas(){
         jatekScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
@@ -92,9 +92,6 @@ public class JatekController {
 
                     XMLKeszito keszito = new XMLKeszito();
                     keszito.keszites(megadottnev, szerzettpont);
-
-                 /*   XMLOlvaso olvaso = new XMLOlvaso();
-                    olvaso.olvasas();*/
 
                     jatekStage.hide();
                 }
@@ -123,7 +120,8 @@ public class JatekController {
         this.megadottnev = megadottnev;
         palyaLetrehozasa();
         tankLetrehozasa();
-        enemyTankokLetrehozasa(random.nextInt(832-56), random.nextInt(100));
+        lovedekLetrehozas();
+        enemyTankokLetrehozasa();
         loopLetrehozasa();
         jatekStage.show();
     }
@@ -137,43 +135,75 @@ public class JatekController {
                     case '0':
                         break;
                     case '1':
-                        Fal asd = new Fal(teglaImg,j*32,i*32);
-                        falak.add(asd);
-                        System.out.println(asd.getPozicioX() + " " + asd.getPozicioY());
-                        jatekPane.getChildren().add(asd.getFal());
+                        Fal gyengeFal = new Fal(j*32, i*32);
+                        Rectangle gyengeFalKocka = new Rectangle(gyengeFal.getSzelesseg(), gyengeFal.getMagassag());
+                        gyengeFalKocka.setLayoutX(gyengeFal.getPozicioX());
+                        gyengeFalKocka.setLayoutY(gyengeFal.getPozicioY());
+                        gyengeFalKocka.setFill(new ImagePattern(teglaImg));
+                        gyengeFalak.add(gyengeFalKocka);
+                        System.out.println(gyengeFal.getPozicioX() + " " + gyengeFal.getPozicioY());
+                        jatekPane.getChildren().add(gyengeFalKocka);
                         break;
                     case '2':
-                        Fal asd1 = new Fal(betonImg, j*32, i*32);
-                        falak.add(asd1);
-                        jatekPane.getChildren().add(asd1.getFal());
+                        Fal erosFal = new Fal(j*32, i*32);
+                        Rectangle erosFalKocka = new Rectangle(erosFal.getSzelesseg(), erosFal.getMagassag());
+                        erosFalKocka.setLayoutX(erosFal.getPozicioX());
+                        erosFalKocka.setLayoutY(erosFal.getPozicioY());
+                        erosFalKocka.setFill(new ImagePattern(betonImg));
+                        erosFalak.add(erosFalKocka);
+                        System.out.println(erosFal.getPozicioX() + " " + erosFal.getPozicioY());
+                        jatekPane.getChildren().add(erosFalKocka);
                         break;
                 }
             }
         }
     }
 
-    private Node falakLetrehozasa(int x, int y, int w, int h, Image kep){
-        Rectangle fal = new Rectangle(w, h);
-        fal.setTranslateX(x);
-        fal.setTranslateY(y);
-        fal.setFill(new ImagePattern(kep));
-        jatekPane.getChildren().add(fal);
-        return fal;
+    private void tankLetrehozasa(){
+        jatekos = new Tank(300, 400, JATEK_SZELESSEG, JATEK_MAGASSAG);
+        jatekosKocka = new Rectangle(jatekos.getSzelesseg(), jatekos.getMagassag());
+        jatekosKocka.setLayoutX(jatekos.getPozicioX());
+        jatekosKocka.setLayoutY(jatekos.getPozicioY());
+        jatekosKocka.setFill(new ImagePattern(tank));
+        jatekPane.getChildren().add(jatekosKocka);
     }
 
-    private void tankLetrehozasa(){
-        jatekos = new Tank(tank, 300, 400);
-        jatekPane.getChildren().add(jatekos.getTank());
+    private void lovedekLetrehozas(){
+        lovedek = new Lovedek(-100, -100, "fel", JATEK_SZELESSEG, JATEK_MAGASSAG);
+        lovedekKocka = new Rectangle(lovedek.getSzelesseg(), lovedek.getMagassag());
+        lovedekKocka.setLayoutX(lovedek.getPozicioX());
+        lovedekKocka.setLayoutY(lovedek.getPozicioY());
+        lovedekKocka.setFill(new ImagePattern(lovedekImg));
+        jatekPane.getChildren().add(lovedekKocka);
+    }
+
+    private void enemyTankokLetrehozasa(){
+        ellenseg1 = new Tank(4,4, JATEK_SZELESSEG, JATEK_MAGASSAG);
+        ellensegKocka1 = new Rectangle(ellenseg1.getSzelesseg(), ellenseg1.getMagassag());
+        ellensegKocka1.setLayoutX(ellenseg1.getPozicioX());
+        ellensegKocka1.setLayoutY(ellenseg1.getPozicioY());
+        ellensegKocka1.setFill(new ImagePattern(testtank2));
+        jatekPane.getChildren().add(ellensegKocka1);
+
+        ellenseg2 = new Tank(4,772, JATEK_SZELESSEG, JATEK_MAGASSAG);
+        ellensegKocka2 = new Rectangle(ellenseg2.getSzelesseg(), ellenseg2.getMagassag());
+        ellensegKocka2.setLayoutX(ellenseg2.getPozicioX());
+        ellensegKocka2.setLayoutY(ellenseg2.getPozicioY());
+        ellensegKocka2.setFill(new ImagePattern(testtank3));
+        jatekPane.getChildren().add(ellensegKocka2);
     }
 
     private void loopLetrehozasa(){
         idozito = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                enemyMozgatas();
-                lovedekMozgatas();
-                utkozesFigyeles();
                 tankMozgas();
+                tankUjraRajzolas();
+                lovedekMozgatas();
+                lovedekUjraRajzolas();
+                ellensegMozgatas();
+                ellensegUjraRajzolas();
+                utkozesFigyeles();
             }
         };
         idozito.start();
@@ -181,108 +211,175 @@ public class JatekController {
 
     private void tankMozgas(){
         if (wGombLenyomva && !aGombLenyomva && !sGombLenyomva && !dGombLenyomva){
-            jatekos.fel(2);
+            jatekos.fel(tankSebesseg);
         }
         if (!wGombLenyomva && aGombLenyomva && !sGombLenyomva && !dGombLenyomva){
-            jatekos.balra(2);
+            jatekos.balra(tankSebesseg);
         }
         if (!wGombLenyomva && !aGombLenyomva && sGombLenyomva && !dGombLenyomva){
-            jatekos.le(2);
+            jatekos.le(tankSebesseg);
         }
         if (!wGombLenyomva && !aGombLenyomva && !sGombLenyomva && dGombLenyomva){
-            jatekos.jobbra(2);
+            jatekos.jobbra(tankSebesseg);
         }
-        if (spaceGombLenyomva && lohet){
+        if (spaceGombLenyomva && lovedek.isHalott()){
             loves();
-          /*  lohet = false;
-            try {
-                Thread.sleep(50);
-            } catch (InterruptedException e){
-                e.printStackTrace();
-            }
-            lohet = true;*/
         }
-    }
-
-    private void enemyTankokLetrehozasa(int X, int Y){
-        for (int i = 0; i<3; i++){
-            Tank konnyuT = new Tank(ezkell, random.nextInt(432-56), random.nextInt(100) );
-            konnyuTankok.add(konnyuT);
-            jatekPane.getChildren().add(konnyuT.getTank());
-        }
-
-        Tank vadaszT = new Tank(ezkell2, random.nextInt(832-56), random.nextInt(100));
-        konnyuTankok.add(vadaszT);
-        jatekPane.getChildren().add(vadaszT.getTank());
-    }
-
-    private void enemyMozgatas(){
-        konnyuTankok.forEach((tankok) -> {
-            tankok.jobbra(4);
-        });
-
-    }
-
-    private void utkozesFigyeles(){
-        falak.forEach((objektum) -> {
-            if (jatekos.getTank().getBoundsInParent().intersects(objektum.getFal().getBoundsInParent())){
-                System.out.println("működik");
-                torles = objektum;
-                torles.getFal().setVisible(false);
-                szerzettpont++;
-            }
-        });
-     /*   falak.forEach((objektum) -> {
-            if (lovedekek.forEach((lovedekekek) -> {
-                lovedekekek.getLovedek().getBoundsInParent().intersects(objektum.getFal().getBoundsInParent())
-            });)
-        });*/
-        falak.remove(torles);
     }
 
     private void loves(){
+        lovedek.setHalott(false);
         String irany = jatekos.getIrany();
         int x = 0;
         int y = 0;
         if (irany.equals("fel")){
-            x = (jatekos.getPozicioX()+(jatekos.getSzelesseg()/2)) -2;
-            y = (jatekos.getPozicioY()+(jatekos.getMagassag()/2)) - 30;
+            x = (jatekos.getPozicioX()+(jatekos.getSzelesseg()/2)) -1;
+            y = (jatekos.getPozicioY()+(jatekos.getMagassag()/2)) - 29;
             System.out.println("lőttem fel");
         }
         if (irany.equals("le")){
-            x = (jatekos.getPozicioX()+(jatekos.getSzelesseg()/2)) - 2;
-            y = (jatekos.getPozicioY()+(jatekos.getMagassag()/2)) + 30;
+            x = (jatekos.getPozicioX()+(jatekos.getSzelesseg()/2)) - 1;
+            y = (jatekos.getPozicioY()+(jatekos.getMagassag()/2)) + 29;
             System.out.println("lőttem le");
         }
         if (irany.equals("jobb")){
-            x = (jatekos.getPozicioX()+(jatekos.getSzelesseg()/2)) + 30;
+            x = (jatekos.getPozicioX()+(jatekos.getSzelesseg()/2)) + 29;
             y = (jatekos.getPozicioY()+(jatekos.getMagassag()/2));
             System.out.println("lőttem jobbra");
         }
         if (irany.equals("bal")){
-            x = (jatekos.getPozicioX()+(jatekos.getSzelesseg()/2)) - 30;
+            x = (jatekos.getPozicioX()+(jatekos.getSzelesseg()/2)) - 29;
             y = (jatekos.getPozicioY()+(jatekos.getMagassag()/2));
             System.out.println("lőttem balra");
         }
-        Lovedek lovedek = new Lovedek(lovedekImg, x, y, irany);
-        lovedekek.add(lovedek);
-        jatekPane.getChildren().add(lovedek.getLovedek());
+        lovedek.setPozicioX(x);
+        lovedek.setPozicioY(y);
+        lovedekKocka.setVisible(true);
+        lovedek.setIrany(irany);
+    }
+
+    private void tankUjraRajzolas(){
+        jatekosKocka.setLayoutX(jatekos.getPozicioX());
+        jatekosKocka.setLayoutY(jatekos.getPozicioY());
+        jatekosKocka.setRotate(jatekos.getSzog());
     }
 
     private void lovedekMozgatas(){
-        lovedekek.forEach((lovedekek) -> {
-            if (lovedekek.getIrany().equals("fel")){
-                lovedekek.fel(8);
-            }
-            if (lovedekek.getIrany().equals("le")){
-                lovedekek.le(8);
-            }
-            if (lovedekek.getIrany().equals("jobb")){
-                lovedekek.jobbra(8);
-            }
-            if (lovedekek.getIrany().equals("bal")){
-                lovedekek.balra(8);
+        if (lovedek.getIrany().equals("fel")){
+            lovedek.fel(lovedekSebesseg);
+        }
+        if (lovedek.getIrany().equals("le")){
+            lovedek.le(lovedekSebesseg);
+        }
+        if (lovedek.getIrany().equals("jobb")){
+            lovedek.jobbra(lovedekSebesseg);
+        }
+        if (lovedek.getIrany().equals("bal")){
+            lovedek.balra(lovedekSebesseg);
+        }
+    }
+
+    private void lovedekUjraRajzolas(){
+        lovedekKocka.setLayoutX(lovedek.getPozicioX());
+        lovedekKocka.setLayoutY(lovedek.getPozicioY());
+    }
+
+    private void ellensegMozgatas(){
+        random = new Random().nextInt(3);
+        if (random == 0){
+            ellenseg1.balra(2);
+        }
+        if (random == 1){
+            ellenseg1.fel(2);
+        }
+        if (random == 2){
+            ellenseg1.jobbra(2);
+        }
+        if (random == 3){
+            ellenseg1.le(2);
+        }
+        random = new Random().nextInt(3);
+        if (random == 0){
+            ellenseg2.balra(2);
+        }
+        if (random == 1){
+            ellenseg2.fel(2);
+        }
+        if (random == 2){
+            ellenseg2.jobbra(2);
+        }
+        if (random == 3){
+            ellenseg2.le(2);
+        }
+    }
+
+    private void ellensegUjraRajzolas(){
+        ellensegKocka1.setLayoutX(ellenseg1.getPozicioX());
+        ellensegKocka1.setLayoutY(ellenseg1.getPozicioY());
+        ellensegKocka1.setRotate(ellenseg1.getSzog());
+        ellensegKocka2.setLayoutX(ellenseg2.getPozicioX());
+        ellensegKocka2.setLayoutY(ellenseg2.getPozicioY());
+        ellensegKocka2.setRotate(ellenseg2.getSzog());
+    }
+
+    private void utkozesFigyeles(){
+        gyengeFalak.forEach((objektum) -> {
+            if (jatekosKocka.getBoundsInParent().intersects(objektum.getBoundsInParent())){
+                System.out.println("működik");
+                kockaTorles = objektum;
+                kockaTorles.setVisible(false);
+                szerzettpont++;
             }
         });
+
+        gyengeFalak.forEach((objektum) -> {
+            if (lovedekKocka.getBoundsInParent().intersects(objektum.getBoundsInParent())){
+                System.out.println("működik");
+                kockaTorles = objektum;
+                lovedek.setHalott(true);
+                kockaTorles.setVisible(false);
+                lovedekKocka.setVisible(false);
+                lovedek.setIrany("");
+                szerzettpont++;
+            }
+        });
+        gyengeFalak.remove(kockaTorles);
+
+        if (lovedek.getPozicioX() < 5 || lovedek.getPozicioX() > JATEK_SZELESSEG - 5
+                || lovedek.getPozicioY() < 5 || lovedek.getPozicioY() > JATEK_MAGASSAG - 5){
+            lovedek.setHalott(true);
+            lovedekKocka.setVisible(false);
+            lovedek.setIrany("");
+        }
+
+        if (lovedekKocka.getBoundsInParent().intersects(ellensegKocka1.getBoundsInParent()) && !lovedek.isHalott()){
+            lovedek.setHalott(true);
+            lovedekKocka.setVisible(false);
+            lovedek.setIrany("");
+            ellenseg1.setHalott(true);
+            ellensegKocka1.setVisible(false);
+            szerzettpont += 1000;
+            random = new Random().nextInt(JATEK_SZELESSEG - ellenseg1.getSzelesseg());
+            ellenseg1.setPozicioX(random);
+            random = new Random().nextInt(JATEK_MAGASSAG - ellenseg1.getMagassag());
+            ellenseg1.setPozicioY(random);
+            ellenseg1.setHalott(false);
+            ellensegKocka1.setVisible(true);
+        }
+
+        if (lovedekKocka.getBoundsInParent().intersects(ellensegKocka2.getBoundsInParent()) && !lovedek.isHalott()){
+            lovedek.setHalott(true);
+            lovedekKocka.setVisible(false);
+            lovedek.setIrany("");
+            ellenseg2.setHalott(true);
+            ellensegKocka2.setVisible(false);
+            szerzettpont += 1000;
+            random = new Random().nextInt(JATEK_SZELESSEG - ellenseg2.getSzelesseg());
+            ellenseg2.setPozicioX(random);
+            random = new Random().nextInt(JATEK_MAGASSAG - ellenseg2.getMagassag());
+            ellenseg2.setPozicioY(random);
+            ellenseg2.setHalott(false);
+            ellensegKocka2.setVisible(true);
+        }
     }
 }

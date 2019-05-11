@@ -1,81 +1,58 @@
 package model;
 
-import javafx.scene.image.Image;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Rectangle;
-
 public class Tank {
-
     private int szelesseg = 56;
     private int magassag = 56;
     private int pozicioX;
     private int pozicioY;
     private String irany = "fel";
+    private int szog = 0;
+    private int palyaSzelesseg;
+    private int palyaMagassag;
 
     private boolean halott = false;
 
-    private Image tankKepe;
-    private Rectangle tank = new Rectangle(szelesseg, magassag);
-
-    public Tank(Image tankKepe, int pozicioX, int pozicioY) {
+    public Tank(int pozicioX, int pozicioY, int palyaSzelesseg, int palyaMagassag) {
         this.pozicioX = pozicioX;
         this.pozicioY = pozicioY;
-        this.tankKepe = tankKepe;
-        tank.setLayoutX(getPozicioX());
-        tank.setLayoutY(getPozicioY());
-        tank.setFill(new ImagePattern(tankKepe));
+        this.palyaSzelesseg = palyaSzelesseg;
+        this.palyaMagassag = palyaMagassag;
+    }
+
+    public Tank(){
+
     }
 
     public void balra(int lepes){
-        this.tank.setRotate(270);
-        irany = "bal";
-        if (tank.getLayoutX() > 0){
-            this.tank.setLayoutX(getPozicioX() - lepes);
-            this.pozicioX -= lepes;
+        setSzog(270);
+        setIrany("bal");
+        if (getPozicioX() > 0){
+            setPozicioX(getPozicioX() - lepes);
         }
     }
 
     public void jobbra(int lepes){
-        this.tank.setRotate(90);
-        irany = "jobb";
-        if (tank.getLayoutX() < (832 - szelesseg)){
-            this.tank.setLayoutX(getPozicioX() + lepes);
-            this.pozicioX += lepes;
+        setSzog(90);
+        setIrany("jobb");
+        if (getPozicioX() < (getPalyaSzelesseg() - getSzelesseg())){
+            setPozicioX(getPozicioX() + lepes);
         }
     }
 
     public void fel(int lepes){
-        this.tank.setRotate(0);
-        irany = "fel";
-        if (tank.getLayoutY() > 0) {
-            this.tank.setLayoutY(getPozicioY() - lepes);
-            this.pozicioY -= lepes;
+        setSzog(0);
+        setIrany("fel");
+        if (getPozicioY() > 0) {
+            setPozicioY(getPozicioY() - lepes);
         }
     }
 
     public void le(int lepes){
-        this.tank.setRotate(180);
-        irany = "le";
-        if (tank.getLayoutY() < (832 - magassag)) {
-            this.tank.setLayoutY(getPozicioY() + lepes);
-            this.pozicioY += lepes;
+        setSzog(180);
+        setIrany("le");
+        if (getPozicioY() < (getPalyaMagassag() - getMagassag())) {
+            setPozicioY(getPozicioY() + lepes);
         }
-    }
-
-    public Rectangle getTank() {
-        return tank;
-    }
-
-    public void setTank(Rectangle tank) {
-        this.tank = tank;
-    }
-
-    public Image getTankKepe() {
-        return tankKepe;
-    }
-
-    public void setTankKepe(Image tankKepe) {
-        this.tankKepe = tankKepe;
     }
 
     public int getPozicioX() {
@@ -110,6 +87,14 @@ public class Tank {
         this.irany = irany;
     }
 
+    public int getSzog() {
+        return szog;
+    }
+
+    public void setSzog(int szog) {
+        this.szog = szog;
+    }
+
     public int getSzelesseg() {
         return szelesseg;
     }
@@ -124,5 +109,21 @@ public class Tank {
 
     public void setMagassag(int magassag) {
         this.magassag = magassag;
+    }
+
+    public int getPalyaSzelesseg() {
+        return palyaSzelesseg;
+    }
+
+    public void setPalyaSzelesseg(int palyaSzelesseg) {
+        this.palyaSzelesseg = palyaSzelesseg;
+    }
+
+    public int getPalyaMagassag() {
+        return palyaMagassag;
+    }
+
+    public void setPalyaMagassag(int palyaMagassag) {
+        this.palyaMagassag = palyaMagassag;
     }
 }

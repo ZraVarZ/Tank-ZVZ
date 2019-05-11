@@ -13,8 +13,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import model.Eredmeny;
-import model.XMLOlvaso;
+import AB.Eredmeny;
+import AB.XMLOlvaso;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -59,7 +59,6 @@ public class FoMenuController implements Initializable {
 
     public String megadottnev;
 
-
     public void handleAdjMegNevetButton(ActionEvent event){
         String nevellenorzes = adjMegNevetTextField.getText();
         nevellenorzes = nevellenorzes.replaceAll("\\s+","");
@@ -98,9 +97,7 @@ public class FoMenuController implements Initializable {
         System.exit(0);
     }
 
-    private ObservableList<Eredmeny> eredmenyek = FXCollections.observableArrayList(
-
-    );
+    private ObservableList<Eredmeny> eredmenyek = FXCollections.observableArrayList();
 
     public void tablazatFeltoltes()
     {
@@ -115,21 +112,17 @@ public class FoMenuController implements Initializable {
             e.printStackTrace();
         }
 
-    //    eredmenyek = eredmenyek.sorted(Comparator.comparing(Integer.valueOf( Eredmeny::getPontszam)));
-
         TableColumn nev = new TableColumn("Név");
         nev.setMinWidth(210);
         nev.setMaxWidth(219);
         nev.setCellFactory(TextFieldTableCell.forTableColumn());
         nev.setCellValueFactory(new PropertyValueFactory<Eredmeny, String>("nev"));
 
-
         TableColumn pontszam = new TableColumn("Pontszám");
         pontszam.setMinWidth(210);
         pontszam.setMaxWidth(219);
         pontszam.setCellFactory(TextFieldTableCell.forTableColumn());
         pontszam.setCellValueFactory(new PropertyValueFactory<Eredmeny, String>("pontszam"));
-
 
         tablazat.getColumns().addAll(nev, pontszam);
         tablazat.setItems(eredmenyek);

@@ -1,73 +1,48 @@
 package model;
 
-import javafx.scene.image.Image;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Rectangle;
-
 public class Lovedek {
     private int szelesseg = 4;
     private int magassag = 4;
     private int pozicioX;
     private int pozicioY;
     private String irany;
+    private int palyaSzelesseg;
+    private int palyaMagassag;
 
-    private boolean halott = false;
+    private boolean halott = true;
 
-    private Image lovedekKepe;
-    private Rectangle lovedek = new Rectangle(szelesseg, magassag);
-
-    public Lovedek(Image lovedekKepe, int pozicioX, int pozicioY, String irany) {
+    public Lovedek(int pozicioX, int pozicioY, String irany, int palyaSzelesseg, int palyaMagassag) {
         this.irany = irany;
         this.pozicioX = pozicioX;
         this.pozicioY = pozicioY;
-        this.lovedekKepe = lovedekKepe;
-        lovedek.setLayoutX(getPozicioX());
-        lovedek.setLayoutY(getPozicioY());
-        lovedek.setFill(new ImagePattern(lovedekKepe));
+        this.palyaSzelesseg = palyaSzelesseg;
+        this.palyaMagassag = palyaMagassag;
     }
 
+    public Lovedek(){}
+
     public void balra(int lepes){
-        if (lovedek.getLayoutX() > 0){
-            this.lovedek.setLayoutX(getPozicioX() - lepes);
-            this.pozicioX -= lepes;
+        if (getPozicioX() > 0){
+            setPozicioX(getPozicioX() - lepes);
         }
     }
 
     public void jobbra(int lepes){
-        if (lovedek.getLayoutX() < (832 - szelesseg)){
-            this.lovedek.setLayoutX(getPozicioX() + lepes);
-            this.pozicioX += lepes;
+        if (getPozicioX() < (getPalyaSzelesseg() - getSzelesseg())){
+            setPozicioX(getPozicioX() + lepes);
         }
     }
 
     public void fel(int lepes){
-        if (lovedek.getLayoutY() > 0) {
-            this.lovedek.setLayoutY(getPozicioY() - lepes);
-            this.pozicioY -= lepes;
+        if (getPozicioY() > 0) {
+            setPozicioY(getPozicioY() - lepes);
         }
     }
 
     public void le(int lepes){
-        if (lovedek.getLayoutY() < (832 - magassag)) {
-            this.lovedek.setLayoutY(getPozicioY() + lepes);
-            this.pozicioY += lepes;
+        if (getPozicioY() < (getPalyaMagassag() - getMagassag())) {
+            setPozicioY(getPozicioY() + lepes);
         }
-    }
-
-    public Rectangle getLovedek() {
-        return lovedek;
-    }
-
-    public void setLovedek(Rectangle lovedek) {
-        this.lovedek = lovedek;
-    }
-
-    public Image getLovedekKepe() {
-        return lovedekKepe;
-    }
-
-    public void setLovedekKepe(Image lovedekKepe) {
-        this.lovedekKepe = lovedekKepe;
     }
 
     public int getPozicioX() {
@@ -100,5 +75,37 @@ public class Lovedek {
 
     public void setIrany(String irany) {
         this.irany = irany;
+    }
+
+    public int getSzelesseg() {
+        return szelesseg;
+    }
+
+    public void setSzelesseg(int szelesseg) {
+        this.szelesseg = szelesseg;
+    }
+
+    public int getMagassag() {
+        return magassag;
+    }
+
+    public void setMagassag(int magassag) {
+        this.magassag = magassag;
+    }
+
+    public int getPalyaSzelesseg() {
+        return palyaSzelesseg;
+    }
+
+    public void setPalyaSzelesseg(int palyaSzelesseg) {
+        this.palyaSzelesseg = palyaSzelesseg;
+    }
+
+    public int getPalyaMagassag() {
+        return palyaMagassag;
+    }
+
+    public void setPalyaMagassag(int palyaMagassag) {
+        this.palyaMagassag = palyaMagassag;
     }
 }
