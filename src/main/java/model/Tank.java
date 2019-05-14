@@ -1,5 +1,8 @@
 package model;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class Tank {
     private int szelesseg = 56;
     private int magassag = 56;
@@ -12,17 +15,24 @@ public class Tank {
 
     private boolean halott = false;
 
+    Logger NAPLOZAS = LoggerFactory.getLogger(Tank.class);
+
     public Tank(int pozicioX, int pozicioY, int palyaSzelesseg, int palyaMagassag) {
         this.pozicioX = pozicioX;
         this.pozicioY = pozicioY;
         this.palyaSzelesseg = palyaSzelesseg;
         this.palyaMagassag = palyaMagassag;
+        NAPLOZAS.info("tank letrejott");
     }
 
     public Tank(){
 
     }
 
+    /**
+     * A tank balra mozgásának metódusa.
+     * @param lepes A lépések száma.
+     */
     public void balra(int lepes){
         setSzog(270);
         setIrany("bal");

@@ -11,8 +11,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.Pane;
-import ab.Eredmeny;
-import ab.XMLOlvaso;
+import adatbazis.Eredmeny;
+import adatbazis.XMLOlvaso;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -40,6 +42,8 @@ public class FoMenuController implements Initializable {
 
     public String megadottnev;
 
+    Logger NAPLOZAS = LoggerFactory.getLogger(FoMenuController.class);
+
     public void handleAdjMegNevetButton(ActionEvent event){
         String nevellenorzes = adjMegNevetTextField.getText();
         nevellenorzes = nevellenorzes.replaceAll("\\s+","");
@@ -51,6 +55,7 @@ public class FoMenuController implements Initializable {
             adjMegNevetPane.setVisible(false);
             alapMenuPane.setOpacity(1);
             alapMenuPane.setDisable(false);
+            NAPLOZAS.info("meg lett adva a nev");
         }
     }
 
@@ -58,6 +63,7 @@ public class FoMenuController implements Initializable {
         System.out.println("a hacsa kápog");
         JatekController jatszunkEgyJatekot = new JatekController();
         jatszunkEgyJatekot.jatekLetrehozasa(megadottnev);
+        NAPLOZAS.info("a hacsa kapog /alias/ elindult a jatek");
     }
 
     public void eredmenyekB(ActionEvent event){
@@ -67,6 +73,7 @@ public class FoMenuController implements Initializable {
             alapMenuPane.setOpacity(0.5);
             alapMenuPane.setDisable(true);
             eredmenyekPane.setVisible(true);
+            NAPLOZAS.info("eredmenyek lekerdezve");
         }
     }
 
@@ -77,6 +84,7 @@ public class FoMenuController implements Initializable {
     }
 
     public void kilepesB(ActionEvent event){
+        NAPLOZAS.info("Kilepes a jatekbol");
         System.out.println("Kilepes...");
         System.exit(0);
     }
@@ -110,11 +118,13 @@ public class FoMenuController implements Initializable {
 
         tablazat.getColumns().addAll(nev, pontszam);
         tablazat.setItems(eredmenyek);
+        NAPLOZAS.info("tablazat feltoltve");
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb)
     {
+        NAPLOZAS.info("inicializalva");
         System.out.println("szevasz");
     }
 }

@@ -1,6 +1,6 @@
 package controller;
 
-import AB.XMLKeszito;
+import adatbazis.XMLKeszito;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -13,11 +13,14 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 public class JatekController {
+    Logger NAPLOZAS = LoggerFactory.getLogger(JatekController.class);
     private AnchorPane jatekPane;
     private Scene jatekScene;
     private Stage jatekStage;
@@ -71,6 +74,7 @@ public class JatekController {
         jatekScene = new Scene(jatekPane, JATEK_SZELESSEG, JATEK_MAGASSAG);
         jatekStage = new Stage();
         jatekStage.setScene(jatekScene);
+        NAPLOZAS.info("jatek inicializalva");
     }
 
     private void initGombnyomas(){
@@ -114,6 +118,7 @@ public class JatekController {
                 }
             }
         });
+        NAPLOZAS.info("gombnyomas letrejott");
     }
 
     public void jatekLetrehozasa(String megadottnev){
@@ -121,9 +126,10 @@ public class JatekController {
         palyaLetrehozasa();
         tankLetrehozasa();
         lovedekLetrehozas();
-        enemyTankokLetrehozasa();
+        ellensegTankokLetrehozasa();
         loopLetrehozasa();
         jatekStage.show();
+        NAPLOZAS.info("itt is kapog a hacsa -- letrejott minden");
     }
 
     private void palyaLetrehozasa(){
@@ -157,6 +163,7 @@ public class JatekController {
                 }
             }
         }
+        NAPLOZAS.info("palya elokerult -- atlantisz felterkepezve");
     }
 
     private void tankLetrehozasa(){
@@ -166,6 +173,7 @@ public class JatekController {
         jatekosKocka.setLayoutY(jatekos.getPozicioY());
         jatekosKocka.setFill(new ImagePattern(tank));
         jatekPane.getChildren().add(jatekosKocka);
+        NAPLOZAS.info("sajat tank feltankolva");
     }
 
     private void lovedekLetrehozas(){
@@ -175,9 +183,10 @@ public class JatekController {
         lovedekKocka.setLayoutY(lovedek.getPozicioY());
         lovedekKocka.setFill(new ImagePattern(lovedekImg));
         jatekPane.getChildren().add(lovedekKocka);
+        NAPLOZAS.info("lovedekek keszen allnak");
     }
 
-    private void enemyTankokLetrehozasa(){
+    private void ellensegTankokLetrehozasa(){
         ellenseg1 = new Tank(4,4, JATEK_SZELESSEG, JATEK_MAGASSAG);
         ellensegKocka1 = new Rectangle(ellenseg1.getSzelesseg(), ellenseg1.getMagassag());
         ellensegKocka1.setLayoutX(ellenseg1.getPozicioX());
@@ -191,6 +200,8 @@ public class JatekController {
         ellensegKocka2.setLayoutY(ellenseg2.getPozicioY());
         ellensegKocka2.setFill(new ImagePattern(testtank3));
         jatekPane.getChildren().add(ellensegKocka2);
+
+        NAPLOZAS.info("ellenseg uzemkesz");
     }
 
     private void loopLetrehozasa(){

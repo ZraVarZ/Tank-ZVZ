@@ -1,6 +1,7 @@
 package model;
 
 public class Palya {
+
     public static final String[] PALYA = new String[]{
             "00000000000000000000000000",
             "00000000000000000000000000",
