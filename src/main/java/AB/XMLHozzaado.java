@@ -1,4 +1,4 @@
-package AB;
+package ab;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -11,33 +11,46 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+/**
+ * A XMLHozzaado osztály képes egy meglévő adatbázishoz új sort hozzáfűzni.
+ */
 public class XMLHozzaado {
-    public void hozzaadas(String megadottnev, Integer szerzettpont) throws Exception{
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-        Document document = documentBuilder.parse("Pontok.xml");
 
-        Element root = document.getDocumentElement();
+    /**
+     * A hozzaadas metódus adja hozzá az adatbázishoz az új sort.
+     * @param megadottnev A játékban megadott név.
+     * @param szerzettpont A játékban szerzett pont.
+     * @throws Exception Kivételek korábban kezelve.
+     */
+    public void hozzaadas(String megadottnev, Integer szerzettpont)
+            throws Exception {
+        DocumentBuilderFactory dBF = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dB = dBF.newDocumentBuilder();
+        Document dokumentum = dB.parse("Pontok.xml");
 
-        Element ujEredmeny = document.createElement("eredmeny");
-        root.appendChild(ujEredmeny);
+        Element gyoker = dokumentum.getDocumentElement();
 
-        Element ujNev = document.createElement("nev");
-        ujNev.appendChild(document.createTextNode(megadottnev));
+        Element ujEredmeny = dokumentum.createElement("eredmeny");
+        gyoker.appendChild(ujEredmeny);
+
+        Element ujNev = dokumentum.createElement("nev");
+        ujNev.appendChild(dokumentum.createTextNode(megadottnev));
         ujEredmeny.appendChild(ujNev);
 
-        Element ujPont = document.createElement("pont");
-        ujPont.appendChild(document.createTextNode(szerzettpont.toString()));
+        Element ujPont = dokumentum.createElement("pont");
+        ujPont.appendChild(dokumentum.createTextNode(szerzettpont.toString()));
         ujEredmeny.appendChild(ujPont);
 
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformerFactory.newTransformer();
+        TransformerFactory tF = TransformerFactory.newInstance();
+        Transformer osszefuzes = tF.newTransformer();
 
-        DOMSource source = new DOMSource(document);
-        StreamResult result = new StreamResult("Pontok.xml");
+        DOMSource forras = new DOMSource(dokumentum);
+        StreamResult eredmeny = new StreamResult("Pontok.xml");
 
-        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-        transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
-        transformer.transform(source, result);
+        osszefuzes.setOutputProperty(OutputKeys.INDENT, "yes");
+        osszefuzes.setOutputProperty(
+                "{http://xml.apache.org/xslt}indent-amount", "4"
+        );
+        osszefuzes.transform(forras, eredmeny);
     }
 }

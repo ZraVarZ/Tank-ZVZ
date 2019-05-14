@@ -1,4 +1,4 @@
-package AB;
+package ab;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -11,10 +11,20 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 
+/**
+ * Az XMLKeszito osztály készíti el az új adatbázist.
+ */
 public class XMLKeszito {
+
+    /**
+     * A keszites metódus hozza létre szükség esetén az új fájlt, meglévő
+     * esetén pedig hozzáilleszt.
+     * @param megadottnev A játékban megadott név.
+     * @param szerzettpont A játékban szerzett pont.
+     */
     public void keszites(String megadottnev, Integer szerzettpont) {
-        File input = new File("Pontok.xml");
-        if (input.exists() && !input.isDirectory()) {
+        File bevitel = new File("Pontok.xml");
+        if (bevitel.exists() && !bevitel.isDirectory()) {
             try {
                 XMLHozzaado hozzaado = new XMLHozzaado();
                 hozzaado.hozzaadas(megadottnev, szerzettpont);
@@ -23,33 +33,34 @@ public class XMLKeszito {
             }
         } else {
             try {
-                DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+                DocumentBuilderFactory dbf =
+                        DocumentBuilderFactory.newInstance();
                 DocumentBuilder db = dbf.newDocumentBuilder();
-                Document document = db.newDocument();
+                Document dokumentum = db.newDocument();
 
-                Element root = document.createElement("eredmenyek");
-                document.appendChild(root);
+                Element gyoker = dokumentum.createElement("eredmenyek");
+                dokumentum.appendChild(gyoker);
 
-                Element eredmeny = document.createElement("eredmeny");
-                root.appendChild(eredmeny);
+                Element eredmeny = dokumentum.createElement("eredmeny");
+                gyoker.appendChild(eredmeny);
 
-                Element nev = document.createElement("nev");
-                nev.appendChild(document.createTextNode(megadottnev));
+                Element nev = dokumentum.createElement("nev");
+                nev.appendChild(dokumentum.createTextNode(megadottnev));
                 eredmeny.appendChild(nev);
 
-                Element pont = document.createElement("pont");
-                pont.appendChild(document.createTextNode(szerzettpont.toString()));
+                Element pont = dokumentum.createElement("pont");
+                pont.appendChild(dokumentum.createTextNode(szerzettpont.toString()));
                 eredmeny.appendChild(pont);
 
                 TransformerFactory tf = TransformerFactory.newInstance();
-                Transformer transformer = tf.newTransformer();
+                Transformer osszefuzes = tf.newTransformer();
 
-                DOMSource source = new DOMSource(document);
-                StreamResult result = new StreamResult(new File("Pontok.xml"));
+                DOMSource forras = new DOMSource(dokumentum);
+                StreamResult veglet = new StreamResult(new File("Pontok.xml"));
 
-                transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-                transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
-                transformer.transform(source, result);
+                osszefuzes.setOutputProperty(OutputKeys.INDENT, "yes");
+                osszefuzes.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+                osszefuzes.transform(forras, veglet);
 
             } catch (ParserConfigurationException e) {
                 e.printStackTrace();

@@ -1,4 +1,4 @@
-package AB;
+package ab;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,35 +14,39 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Az XMLOlvaso osztály olvassa be a meglévő adatbázis adatait
+ */
 public class XMLOlvaso {
-    public ObservableList olvasas() throws ParserConfigurationException, SAXException, IOException{
+    public ObservableList olvasas()
+           throws ParserConfigurationException, SAXException, IOException {
 
-        File input = new File("Pontok.xml");
+        File bevitel = new File("Pontok.xml");
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
-        Document document = db.parse(input);
+        Document dokumentum = db.parse(bevitel);
         ObservableList<Eredmeny> eredmenyek = FXCollections.observableArrayList();
-        NodeList nodeList = document.getElementsByTagName("eredmeny");
+        NodeList csomopontLista = dokumentum.getElementsByTagName("eredmeny");
 
-        for (int i = 0; i < nodeList.getLength(); i++){
+        for (int i = 0; i < csomopontLista.getLength(); i++){
             Eredmeny eredmeny = new Eredmeny();
-            Node node = nodeList.item(i);
+            Node csomopont = csomopontLista.item(i);
 
-            if (node.getNodeType() == Node.ELEMENT_NODE){
-                Element element = (Element) node;
-                eredmeny.setNev(element
+            if (csomopont.getNodeType() == Node.ELEMENT_NODE){
+                Element elem = (Element) csomopont;
+                eredmeny.setNev(elem
                         .getElementsByTagName("nev")
                         .item(0)
                         .getTextContent());
-                System.out.println(element
+                System.out.println(elem
                         .getElementsByTagName("nev")
                         .item(0)
                         .getTextContent());
-                eredmeny.setPontszam(element
+                eredmeny.setPontszam(elem
                         .getElementsByTagName("pont")
                         .item(0)
                         .getTextContent());
-                System.out.println(element
+                System.out.println(elem
                         .getElementsByTagName("pont")
                         .item(0)
                         .getTextContent());
