@@ -14,8 +14,9 @@ public class Main extends Application {
     }
 
     @Override
-    public void start(Stage ablak) throws Exception{
-        FXMLLoader foMenuLoader = new FXMLLoader(getClass().getClassLoader().getResource("FXML/MindenIS.fxml"));
+    public void start(Stage ablak) throws Exception {
+        FXMLLoader foMenuLoader = new FXMLLoader(
+                getClass().getClassLoader().getResource("FXML/MindenIS.fxml"));
         Parent menuGyoker = foMenuLoader.load();
         ablak.setTitle("TANK-ZVZ");
         menuJelenet = new Scene(menuGyoker);

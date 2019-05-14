@@ -24,7 +24,7 @@
 
     <scm>
         <connection>scm:git:https://github.com/ZraVarZ/Tank-ZVZ</connection>
-        <developerConnection>scm:git:https://github.com/ZraVarZ/Tank-ZVZ</developerConnection>
+        <developerConnection>scm:git:git@github.com/ZraVarZ/Tank-ZVZ</developerConnection>
         <url>https://github.com/ZraVarZ/Tank-ZVZ</url>
     </scm>
 

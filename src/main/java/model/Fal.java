@@ -11,7 +11,7 @@ public class Fal {
     /**
      * Ez a naplózás.
      */
-    Logger NAPLOZAS = LoggerFactory.getLogger(Fal.class);
+    private static final Logger NAPLOZAS = LoggerFactory.getLogger(Fal.class);
 
     /**
      * Ez a változó tartalmazza a fal szélességét.
@@ -34,9 +34,9 @@ public class Fal {
     private int pozicioY;
 
     /**
-     * A Fal osztály felépítője.
-     * @param pozicioX A fal X pozíciója.
-     * @param pozicioY A fal Y pozíciója.
+     * A Fal osztály felépítője {@code Fal}.
+     * @param pozicioX A fal X pozíciója {@code int}.
+     * @param pozicioY A fal Y pozíciója {@code int}.
      */
     public Fal(int pozicioX, int pozicioY) {
         this.pozicioX = pozicioX;
@@ -47,7 +47,7 @@ public class Fal {
     /**
      * A fal osztály üres felépítője.
      */
-    public Fal(){
+    public Fal() {
 
     }
 

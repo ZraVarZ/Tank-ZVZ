@@ -15,9 +15,17 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Az XMLOlvaso osztály olvassa be a meglévő adatbázis adatait
+ * Az XMLOlvaso osztály olvassa be a meglévő adatbázis adatait.
  */
 public class XMLOlvaso {
+
+    /**
+     * Az olvasas függvény végzi el az olvasást.
+     * @return ObservableList az eredmenyekkel tele.
+     * @throws ParserConfigurationException Kivétel.
+     * @throws SAXException Kivétel.
+     * @throws IOException Kivétel.
+     */
     public ObservableList olvasas()
            throws ParserConfigurationException, SAXException, IOException {
 
@@ -25,14 +33,15 @@ public class XMLOlvaso {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         Document dokumentum = db.parse(bevitel);
-        ObservableList<Eredmeny> eredmenyek = FXCollections.observableArrayList();
+        ObservableList<Eredmeny> eredmenyek =
+                FXCollections.observableArrayList();
         NodeList csomopontLista = dokumentum.getElementsByTagName("eredmeny");
 
-        for (int i = 0; i < csomopontLista.getLength(); i++){
+        for (int i = 0; i < csomopontLista.getLength(); i++) {
             Eredmeny eredmeny = new Eredmeny();
             Node csomopont = csomopontLista.item(i);
 
-            if (csomopont.getNodeType() == Node.ELEMENT_NODE){
+            if (csomopont.getNodeType() == Node.ELEMENT_NODE) {
                 Element elem = (Element) csomopont;
                 eredmeny.setNev(elem
                         .getElementsByTagName("nev")

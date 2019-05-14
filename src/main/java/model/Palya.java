@@ -1,8 +1,15 @@
 package model;
 
+
+/**
+ * A Palya osztály jelenti a kirajzolt pályát a játékban.
+ */
 public class Palya {
 
-    public static final String[] PALYA = new String[]{
+    /**
+     * Ez a változó tárolja el a pálya elemeinek az elrendezését.
+     */
+    public static final String[] PALYA = new String[] {
             "00000000000000000000000000",
             "00000000000000000000000000",
             "00111111111111111111111100",

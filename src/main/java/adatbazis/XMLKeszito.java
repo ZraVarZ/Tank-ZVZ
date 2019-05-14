@@ -49,7 +49,8 @@ public class XMLKeszito {
                 eredmeny.appendChild(nev);
 
                 Element pont = dokumentum.createElement("pont");
-                pont.appendChild(dokumentum.createTextNode(szerzettpont.toString()));
+                pont.appendChild(dokumentum.createTextNode(
+                        szerzettpont.toString()));
                 eredmeny.appendChild(pont);
 
                 TransformerFactory tf = TransformerFactory.newInstance();
@@ -59,7 +60,8 @@ public class XMLKeszito {
                 StreamResult veglet = new StreamResult(new File("Pontok.xml"));
 
                 osszefuzes.setOutputProperty(OutputKeys.INDENT, "yes");
-                osszefuzes.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+                osszefuzes.setOutputProperty(
+                        "{http://xml.apache.org/xslt}indent-amount", "4");
                 osszefuzes.transform(forras, veglet);
 
             } catch (ParserConfigurationException e) {
