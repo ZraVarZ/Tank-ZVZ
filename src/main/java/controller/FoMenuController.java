@@ -23,28 +23,61 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * A FoMenuController oszály tartalmazza a menü elemeit.
+ */
 public class FoMenuController implements Initializable {
 
+    /**
+     * Az alap háttér.
+     */
     @FXML
     private Pane alapMenuPane;
 
+    /**
+     * A belépéskor nevet bekérő lap.
+     */
     @FXML
     private Pane adjMegNevetPane;
 
+    /**
+     * Az eredmények lapja.
+     */
     @FXML
     private Pane eredmenyekPane;
 
+    /**
+     * Ebbe kell megadni a nevet.
+     */
     @FXML
     private TextField adjMegNevetTextField;
 
+    /**
+     * Ez tartalmazza az eredményeket.
+     */
     @FXML
     private TableView tablazat;
 
+    /**
+     * Ez a változó tárolja a megadott nevet.
+     */
     public String megadottnev;
 
+    /**
+     * Ez tárolja el az eredmények listáit.
+     */
+    private ObservableList<Eredmeny> eredmenyek = FXCollections.observableArrayList();
+
+    /**
+     * Naplózás.
+     */
     Logger NAPLOZAS = LoggerFactory.getLogger(FoMenuController.class);
 
-    public void handleAdjMegNevetButton(ActionEvent event){
+    /**
+     * Elfogadja a megadott nevet. Vagy nem.
+     * @param event event.
+     */
+    public void handleAdjMegNevetButton(ActionEvent event) {
         String nevellenorzes = adjMegNevetTextField.getText();
         nevellenorzes = nevellenorzes.replaceAll("\\s+","");
         if (nevellenorzes.equals("")){
@@ -59,14 +92,22 @@ public class FoMenuController implements Initializable {
         }
     }
 
-    public void kezdesB(ActionEvent event){
+    /**
+     * Elindítja a játékot.
+     * @param event event.
+     */
+    public void kezdesB(ActionEvent event) {
         System.out.println("a hacsa kápog");
         JatekController jatszunkEgyJatekot = new JatekController();
         jatszunkEgyJatekot.jatekLetrehozasa(megadottnev);
         NAPLOZAS.info("a hacsa kapog /alias/ elindult a jatek");
     }
 
-    public void eredmenyekB(ActionEvent event){
+    /**
+     * Előhozza az eredményeket.
+     * @param event event.
+     */
+    public void eredmenyekB(ActionEvent event) {
         File bevitel = new File("Pontok.xml");
         if (bevitel.exists() && !bevitel.isDirectory()){
             tablazatFeltoltes();
@@ -77,30 +118,38 @@ public class FoMenuController implements Initializable {
         }
     }
 
-    public void handleEredmenyekExitButton(ActionEvent event){
+    /**
+     * Kilép az eredményekből.
+     * @param event event.
+     */
+    public void handleEredmenyekExitButton(ActionEvent event) {
         alapMenuPane.setOpacity(1.0);
         alapMenuPane.setDisable(false);
         eredmenyekPane.setVisible(false);
     }
 
-    public void kilepesB(ActionEvent event){
+    /**
+     * Kilép a játékból.
+     * @param event event.
+     */
+    public void kilepesB(ActionEvent event) {
         NAPLOZAS.info("Kilepes a jatekbol");
         System.out.println("Kilepes...");
         System.exit(0);
     }
 
-    private ObservableList<Eredmeny> eredmenyek = FXCollections.observableArrayList();
-
-    public void tablazatFeltoltes()
-    {
+    /**
+     * Feltölti az táblázatot az adatbázissal.
+     */
+    public void tablazatFeltoltes() {
         XMLOlvaso olvaso = new XMLOlvaso();
         try {
             eredmenyek = olvaso.olvasas();
-        } catch (ParserConfigurationException e){
+        } catch (ParserConfigurationException e) {
             e.printStackTrace();
-        } catch (SAXException e){
+        } catch (SAXException e) {
             e.printStackTrace();
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -121,9 +170,13 @@ public class FoMenuController implements Initializable {
         NAPLOZAS.info("tablazat feltoltve");
     }
 
+    /**
+     * Létrehozáskor automatikusan lefut.
+     * @param url url.
+     * @param rb rb.
+     */
     @Override
-    public void initialize(URL url, ResourceBundle rb)
-    {
+    public void initialize(URL url, ResourceBundle rb) {
         NAPLOZAS.info("inicializalva");
         System.out.println("szevasz");
     }

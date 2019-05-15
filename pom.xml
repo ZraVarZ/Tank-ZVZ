@@ -6,12 +6,12 @@
 
     <groupId>com.zravarz</groupId>
     <artifactId>Tank-ZVZ</artifactId>
-    <version>1.1.1-SNAPSHOT</version>
+    <version>1.2</version>
 
     <description>
         The old NES game, Tank 1990 is back with a small change! Now it is written in java language, and perfectly fits
         on a FLOPPY DISK.
-        A gyerekkorom első játéka, a Nintendo-n elérhető Tank 1990 visszatért egy kis változással együtt, java-ban.
+        A Nintendo-n elérhető Tank 1990 visszatért egy kis változással együtt, java-ban.
     </description>
 
     <developers>
@@ -46,9 +46,20 @@
     <dependencies>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.0.3</version>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.3.2</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-runner</artifactId>
+            <version>1.2.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>0.8.2</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -75,7 +86,7 @@
                 <version>3.0.0-M1</version>
                 <executions>
                     <execution>
-                        <id>enforce-versions</id>
+                        <id>enforce-java</id>
                         <phase>validate</phase>
                         <goals>
                             <goal>enforce</goal>
@@ -94,6 +105,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
@@ -102,26 +114,23 @@
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <additionalOptions>
-                        <additionalOption>-Xdoclint:none</additionalOption>
-                    </additionalOptions>
-                </configuration>
             </plugin>
 
             <plugin>
-                <groupId>com.atlassian.maven.plugins</groupId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M3</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
-                <version>4.1.2</version>
-                <configuration>
-                    <targetPercentage>10%</targetPercentage>
-                </configuration>
+                <version>4.3.1</version>
                 <executions>
                     <execution>
-                        <phase>verify</phase>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>instrument</goal>
-                            <goal>check</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -131,13 +140,82 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>3.0.0</version>
+                <configuration>
+                    <configLocation>checkstyle.xml</configLocation>
+                </configuration>
             </plugin>
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.7.1</version>
+                <configuration>
+                    <outputEncoding>${project.reporting.outputEncoding}</outputEncoding>
+                    <locales>hu</locales>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <archive>
+                                <manifest>
+                                    <mainClass>main.Main</mainClass>
+                                </manifest>
+                            </archive>
+                            <descriptorRefs>
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
+                            </descriptorRefs>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <executions>
+                    <execution>
+                        <id>exec</id>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>main.Main</mainClass>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
     <reporting>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.4</version>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-report-plugin</artifactId>
@@ -151,8 +229,9 @@
             </plugin>
 
             <plugin>
-                <groupId>com.atlassian.maven.plugins</groupId>
+                <groupId>org.openclover</groupId>
                 <artifactId>clover-maven-plugin</artifactId>
+                <version>4.3.1</version>
             </plugin>
 
             <plugin>
@@ -160,11 +239,7 @@
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>3.0.0</version>
                 <configuration>
-                    <excludes>**/controller/**/*</excludes>
-                    <configLocation>${basedir}/src/test/resources/checkstyle.xml</configLocation>
-                    <encoding>UTF-8</encoding>
-                    <consoleOutput>true</consoleOutput>
-                    <failsOnError>true</failsOnError>
+                    <configLocation>checkstyle.xml</configLocation>
                 </configuration>
             </plugin>
         </plugins>

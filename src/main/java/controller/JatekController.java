@@ -19,56 +19,197 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * A JatekController osztály tartalmazza a játék elemeit.
+ */
 public class JatekController {
+
+    /**
+     * Naplózás.
+     */
     Logger NAPLOZAS = LoggerFactory.getLogger(JatekController.class);
+
+    /**
+     * Az alap lap.
+     */
     private AnchorPane jatekPane;
+
+    /**
+     * A jelenet.
+     */
     private Scene jatekScene;
+
+    /**
+     * A színpad.
+     */
     private Stage jatekStage;
 
+    /**
+     * Az ablak szélessége.
+     */
     private static final int JATEK_SZELESSEG = 832;
+
+    /**
+     * Az ablak magassága.
+     */
     private static final int JATEK_MAGASSAG = 832;
+
+    /**
+     * A tankok sebessége.
+     */
     private int tankSebesseg = 2;
+
+    /**
+     * A lövedék sebessége.
+     */
     private int lovedekSebesseg = 8;
 
+    /**
+     * W gomb lenyomás érzékelő.
+     */
     private boolean wGombLenyomva;
+
+    /**
+     * A gomb lenyomás érzékelő.
+     */
     private boolean aGombLenyomva;
+
+    /**
+     * S gomb lenyomás érzékelő.
+     */
     private boolean sGombLenyomva;
+
+    /**
+     * D gomb lenyomás érzékelő.
+     */
     private boolean dGombLenyomva;
+
+    /**
+     * Space lenyomás érzékelő.
+     */
     private boolean spaceGombLenyomva;
+
+    /**
+     * Időzítő.
+     */
     private AnimationTimer idozito;
 
+    /**
+     * A pálya háttere.
+     */
     private ImageView palyaKep = new ImageView("pictures/palya.png");
+
+    /**
+     * Egyik ellenség képe.
+     */
     private Image testtank3 = new Image("pictures/testtank3.png");
+
+    /**
+     * Másik ellenség képe.
+     */
     private Image testtank2 = new Image("pictures/testtank2.png");
+
+    /**
+     * Tégla képe.
+     */
     private Image teglaImg = new Image("pictures/tegla.png");
+
+    /**
+     * Beton képe.
+     */
     private Image betonImg = new Image("pictures/beton.png");
+
+    /**
+     * Lövedék képe.
+     */
     private Image lovedekImg = new Image("pictures/lovedek.png");
+
+    /**
+     * Játékos tank képe.
+     */
     private Image tank = new Image("pictures/jatekostankja.png");
 
+    /**
+     * A tégla falakat tároló lista.
+     */
     private ArrayList<Rectangle> gyengeFalak = new ArrayList<>();
+
+    /**
+     * A beton falakat tároló lista.
+     */
     private ArrayList<Rectangle> erosFalak = new ArrayList<>();
 
+    /**
+     * A törlendő elem.
+     */
     private Rectangle kockaTorles = null;
 
+    /**
+     * A játék elején megadott név.
+     */
     private String megadottnev;
+
+    /**
+     * A játék során szerzett pont.
+     */
     private Integer szerzettpont = 0;
 
+    /**
+     * A játékos.
+     */
     private Tank jatekos;
+
+    /**
+     * Egyik ellenség.
+     */
     private Tank ellenseg1;
+
+    /**
+     * Másik ellenség.
+     */
     private Tank ellenseg2;
+
+    /**
+     * A játékos négyzete.
+     */
     private Rectangle jatekosKocka;
+
+    /**
+     * Egyik ellenség négyzete.
+     */
     private Rectangle ellensegKocka1;
+
+    /**
+     * Másik ellenség négyzete.
+     */
     private Rectangle ellensegKocka2;
+
+    /**
+     * Lövedék.
+     */
     private Lovedek lovedek;
+
+    /**
+     * Lövedék négyzete.
+     */
     private Rectangle lovedekKocka;
 
+    /**
+     * random szám.
+     */
     private int random;
 
+    /**
+     * A JatekController létrehozója.
+     */
     JatekController(){
         initStage();
         initGombnyomas();
     }
 
+    /**
+     * Létrehozza a teret.
+     */
     private void initStage(){
         jatekPane = new AnchorPane();
         jatekScene = new Scene(jatekPane, JATEK_SZELESSEG, JATEK_MAGASSAG);
@@ -77,6 +218,9 @@ public class JatekController {
         NAPLOZAS.info("jatek inicializalva");
     }
 
+    /**
+     * Létrehozza a gombnyomásokat.
+     */
     private void initGombnyomas(){
         jatekScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
@@ -121,6 +265,10 @@ public class JatekController {
         NAPLOZAS.info("gombnyomas letrejott");
     }
 
+    /**
+     * Létrehozza a játék elemeit.
+     * @param megadottnev A megadott név.
+     */
     public void jatekLetrehozasa(String megadottnev){
         this.megadottnev = megadottnev;
         palyaLetrehozasa();
@@ -132,6 +280,9 @@ public class JatekController {
         NAPLOZAS.info("itt is kapog a hacsa -- letrejott minden");
     }
 
+    /**
+     * Létrehozza a pályát.
+     */
     private void palyaLetrehozasa(){
         jatekPane.getChildren().add(palyaKep);
         for (int i = 0; i < Palya.PALYA.length; i++){
@@ -166,6 +317,9 @@ public class JatekController {
         NAPLOZAS.info("palya elokerult -- atlantisz felterkepezve");
     }
 
+    /**
+     * Létrehozza a játékos tankját.
+     */
     private void tankLetrehozasa(){
         jatekos = new Tank(300, 400, JATEK_SZELESSEG, JATEK_MAGASSAG);
         jatekosKocka = new Rectangle(jatekos.getSzelesseg(), jatekos.getMagassag());
@@ -176,6 +330,9 @@ public class JatekController {
         NAPLOZAS.info("sajat tank feltankolva");
     }
 
+    /**
+     * Létrehozza a lövedéket.
+     */
     private void lovedekLetrehozas(){
         lovedek = new Lovedek(-100, -100, "fel", JATEK_SZELESSEG, JATEK_MAGASSAG);
         lovedekKocka = new Rectangle(lovedek.getSzelesseg(), lovedek.getMagassag());
@@ -186,6 +343,9 @@ public class JatekController {
         NAPLOZAS.info("lovedekek keszen allnak");
     }
 
+    /**
+     * Létrehozza az ellenséges tankokat.
+     */
     private void ellensegTankokLetrehozasa(){
         ellenseg1 = new Tank(4,4, JATEK_SZELESSEG, JATEK_MAGASSAG);
         ellensegKocka1 = new Rectangle(ellenseg1.getSzelesseg(), ellenseg1.getMagassag());
@@ -204,6 +364,9 @@ public class JatekController {
         NAPLOZAS.info("ellenseg uzemkesz");
     }
 
+    /**
+     * Létrehozza a játék folyamatát.
+     */
     private void loopLetrehozasa(){
         idozito = new AnimationTimer() {
             @Override
@@ -220,6 +383,9 @@ public class JatekController {
         idozito.start();
     }
 
+    /**
+     * Figyeli a lenyomott gombokat.
+     */
     private void tankMozgas(){
         if (wGombLenyomva && !aGombLenyomva && !sGombLenyomva && !dGombLenyomva){
             jatekos.fel(tankSebesseg);
@@ -238,6 +404,9 @@ public class JatekController {
         }
     }
 
+    /**
+     * Irányítja a lövést.
+     */
     private void loves(){
         lovedek.setHalott(false);
         String irany = jatekos.getIrany();
@@ -269,12 +438,18 @@ public class JatekController {
         lovedek.setIrany(irany);
     }
 
+    /**
+     * Újrarajzolja a tankot.
+     */
     private void tankUjraRajzolas(){
         jatekosKocka.setLayoutX(jatekos.getPozicioX());
         jatekosKocka.setLayoutY(jatekos.getPozicioY());
         jatekosKocka.setRotate(jatekos.getSzog());
     }
 
+    /**
+     * Irányítja a lövedéket.
+     */
     private void lovedekMozgatas(){
         if (lovedek.getIrany().equals("fel")){
             lovedek.fel(lovedekSebesseg);
@@ -290,11 +465,17 @@ public class JatekController {
         }
     }
 
+    /**
+     * Újrarajzolja a lövedéket.
+     */
     private void lovedekUjraRajzolas(){
         lovedekKocka.setLayoutX(lovedek.getPozicioX());
         lovedekKocka.setLayoutY(lovedek.getPozicioY());
     }
 
+    /**
+     * Irányítja az ellenségeket.
+     */
     private void ellensegMozgatas(){
         random = new Random().nextInt(12);
         if (random == 0 || random == 1 || random == 2){
@@ -324,6 +505,9 @@ public class JatekController {
         }
     }
 
+    /**
+     * Újrarajzolja az ellenségeket.
+     */
     private void ellensegUjraRajzolas(){
         ellensegKocka1.setLayoutX(ellenseg1.getPozicioX());
         ellensegKocka1.setLayoutY(ellenseg1.getPozicioY());
@@ -333,6 +517,9 @@ public class JatekController {
         ellensegKocka2.setRotate(ellenseg2.getSzog());
     }
 
+    /**
+     * Figyeli az ütközéseket.
+     */
     private void utkozesFigyeles(){
         gyengeFalak.forEach((objektum) -> {
             if (jatekosKocka.getBoundsInParent().intersects(objektum.getBoundsInParent())){
