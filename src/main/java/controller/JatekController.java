@@ -298,7 +298,6 @@ public class JatekController {
                         gyengeFalKocka.setLayoutY(gyengeFal.getPozicioY());
                         gyengeFalKocka.setFill(new ImagePattern(teglaImg));
                         gyengeFalak.add(gyengeFalKocka);
-                        System.out.println(gyengeFal.getPozicioX() + " " + gyengeFal.getPozicioY());
                         jatekPane.getChildren().add(gyengeFalKocka);
                         break;
                     case '2':
@@ -308,7 +307,6 @@ public class JatekController {
                         erosFalKocka.setLayoutY(erosFal.getPozicioY());
                         erosFalKocka.setFill(new ImagePattern(betonImg));
                         erosFalak.add(erosFalKocka);
-                        System.out.println(erosFal.getPozicioX() + " " + erosFal.getPozicioY());
                         jatekPane.getChildren().add(erosFalKocka);
                         break;
                 }
@@ -415,22 +413,18 @@ public class JatekController {
         if (irany.equals("fel")){
             x = (jatekos.getPozicioX()+(jatekos.getSzelesseg()/2)) -1;
             y = (jatekos.getPozicioY()+(jatekos.getMagassag()/2)) - 29;
-            System.out.println("lőttem fel");
         }
         if (irany.equals("le")){
             x = (jatekos.getPozicioX()+(jatekos.getSzelesseg()/2)) - 1;
             y = (jatekos.getPozicioY()+(jatekos.getMagassag()/2)) + 29;
-            System.out.println("lőttem le");
         }
         if (irany.equals("jobb")){
             x = (jatekos.getPozicioX()+(jatekos.getSzelesseg()/2)) + 29;
             y = (jatekos.getPozicioY()+(jatekos.getMagassag()/2));
-            System.out.println("lőttem jobbra");
         }
         if (irany.equals("bal")){
             x = (jatekos.getPozicioX()+(jatekos.getSzelesseg()/2)) - 29;
             y = (jatekos.getPozicioY()+(jatekos.getMagassag()/2));
-            System.out.println("lőttem balra");
         }
         lovedek.setPozicioX(x);
         lovedek.setPozicioY(y);
@@ -523,7 +517,6 @@ public class JatekController {
     private void utkozesFigyeles(){
         gyengeFalak.forEach((objektum) -> {
             if (jatekosKocka.getBoundsInParent().intersects(objektum.getBoundsInParent())){
-                System.out.println("működik");
                 kockaTorles = objektum;
                 kockaTorles.setVisible(false);
                 szerzettpont++;
@@ -532,7 +525,6 @@ public class JatekController {
 
         gyengeFalak.forEach((objektum) -> {
             if (lovedekKocka.getBoundsInParent().intersects(objektum.getBoundsInParent())){
-                System.out.println("működik");
                 kockaTorles = objektum;
                 lovedek.setHalott(true);
                 kockaTorles.setVisible(false);

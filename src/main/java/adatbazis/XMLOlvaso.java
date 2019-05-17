@@ -47,15 +47,7 @@ public class XMLOlvaso {
                         .getElementsByTagName("nev")
                         .item(0)
                         .getTextContent());
-                System.out.println(elem
-                        .getElementsByTagName("nev")
-                        .item(0)
-                        .getTextContent());
                 eredmeny.setPontszam(elem
-                        .getElementsByTagName("pont")
-                        .item(0)
-                        .getTextContent());
-                System.out.println(elem
                         .getElementsByTagName("pont")
                         .item(0)
                         .getTextContent());

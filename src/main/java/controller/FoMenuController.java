@@ -97,7 +97,6 @@ public class FoMenuController implements Initializable {
      * @param event event.
      */
     public void kezdesB(ActionEvent event) {
-        System.out.println("a hacsa kápog");
         JatekController jatszunkEgyJatekot = new JatekController();
         jatszunkEgyJatekot.jatekLetrehozasa(megadottnev);
         NAPLOZAS.info("a hacsa kapog /alias/ elindult a jatek");
@@ -134,7 +133,6 @@ public class FoMenuController implements Initializable {
      */
     public void kilepesB(ActionEvent event) {
         NAPLOZAS.info("Kilepes a jatekbol");
-        System.out.println("Kilepes...");
         System.exit(0);
     }
 
@@ -178,6 +176,5 @@ public class FoMenuController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         NAPLOZAS.info("inicializalva");
-        System.out.println("szevasz");
     }
 }
